@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Picture guide | Fizzo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --page: #f2efe9;
+      --sheet: #fbfaf6;
+      --ink: #0f0f11;
+      --ink-soft: #5c5a56;
+      --line: #d9d3c5;
+      --brick: #d9480f;
+      --brick-deep: #b23a0a;
+      --tint: #fde9dc;
+      --sand: #f0d9c6;
+      --ok: #2d7a4f;
+      --display: "Instrument Serif", Georgia, serif;
+      --text: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--ink);
+      font-family: var(--text);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    :focus-visible { outline: 2px solid var(--brick); outline-offset: 2px; border-radius: 4px; }
+
+    a { color: var(--brick-deep); }
+    code { font-family: var(--mono); font-size: 0.88em; background: var(--tint); padding: 0.1em 0.35em; border-radius: 4px; }
+
+    .bar {
+      position: sticky; top: 0; z-index: 5;
+      display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px;
+      padding: 10px clamp(16px, 4vw, 40px);
+      background: rgba(242, 239, 233, 0.94);
+      border-bottom: 1px solid var(--line);
+    }
+    .progress { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 0.92rem; font-weight: 500; }
+    .meter { width: 120px; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+    .meter span { display: block; height: 100%; width: 0; background: var(--ok); transition: width 300ms ease; }
+    .linkbtn { border: 0; background: none; padding: 0; font: inherit; font-size: 0.9rem; color: var(--brick-deep); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+
+    main { max-width: 860px; margin: 0 auto; padding: clamp(24px, 5vw, 56px) clamp(16px, 4vw, 40px) 80px; }
+    h1 { margin: 0 0 0.25em; font-family: var(--display); font-weight: 400; font-size: clamp(2.2rem, 5.2vw, 3.3rem); line-height: 1; letter-spacing: -0.02em; }
+    .lede { margin: 0 0 24px; max-width: 62ch; color: var(--ink-soft); font-size: 1.05rem; }
+
+    .step { margin-top: clamp(40px, 7vw, 72px); }
+    .step > h2 { display: flex; align-items: baseline; gap: 14px; margin: 0 0 6px; font-size: 1.45rem; font-weight: 700; line-height: 1.2; }
+    .step > h2 .num { font-family: var(--display); font-weight: 400; font-size: 2.2rem; color: var(--brick); }
+    .step > p { margin: 0 0 18px; max-width: 66ch; color: var(--ink-soft); }
+
+    .model { padding: 18px 20px; border-radius: 10px; background: var(--ink); color: var(--sheet); }
+    .model .label { margin: 0; font-size: 0.85rem; color: rgba(251, 250, 246, 0.7); }
+    .model .name { margin: 2px 0 6px; font-size: 1.45rem; font-weight: 700; line-height: 1.2; }
+    .model .name small { margin-left: 8px; font-size: 0.85rem; font-weight: 400; color: rgba(251, 250, 246, 0.7); }
+    .model .why { margin: 0 0 12px; max-width: 64ch; color: rgba(251, 250, 246, 0.86); }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+    .chips li { padding: 4px 11px; border-radius: 999px; background: rgba(240, 217, 198, 0.14); border: 1px solid rgba(240, 217, 198, 0.5); color: var(--sand); font-size: 0.88rem; font-weight: 500; }
+
+    .asset { margin-top: 14px; padding: 16px 18px; background: var(--sheet); border: 1px solid var(--line); border-radius: 10px; }
+    .asset.is-found { border-color: var(--ok); }
+    .asset-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-bottom: 10px; }
+    .asset-head h3 { margin: 0; font-size: 1.05rem; font-weight: 700; }
+    .asset-head .n { display: inline-grid; place-items: center; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 6px; background: var(--ink); color: var(--sheet); font-weight: 700; font-size: 0.92rem; }
+    .asset-head .dot { width: 16px; height: 16px; border-radius: 50%; border: 1px solid rgba(0, 0, 0, 0.2); }
+    .status { margin-left: auto; padding: 2px 10px; border-radius: 999px; font-size: 0.82rem; font-weight: 600; background: var(--page); color: var(--ink-soft); border: 1px solid var(--line); }
+    .is-found .status { background: #dff1e4; color: var(--ok); border-color: #a9d6b8; }
+
+    .attach { margin: 0 0 10px; padding: 8px 12px; border-radius: 8px; background: #f8ecd0; border: 1px solid #e6d3a3; font-size: 0.93rem; }
+    .asset-body { display: flex; gap: 14px; align-items: flex-start; }
+    .prompt { flex: 1; margin: 0; padding: 12px 14px; border-left: 3px solid var(--brick); border-radius: 0 8px 8px 0; background: var(--tint); font-size: 0.95rem; white-space: pre-wrap; }
+    .preview { flex: none; width: 120px; aspect-ratio: 1; object-fit: contain; border-radius: 6px; border: 1px solid var(--line); background: #fff; }
+    .preview[hidden] { display: none; }
+
+    .asset-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin-top: 12px; font-size: 0.9rem; color: var(--ink-soft); }
+    .copy { border: 0; border-radius: 6px; padding: 8px 16px; background: var(--brick); color: #fff; font: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer; }
+    .copy:hover { background: var(--brick-deep); }
+    .copy.is-done { background: var(--ok); }
+
+    .note { margin: 14px 0 0; padding: 12px 14px; border-radius: 10px; background: #f8ecd0; border: 1px solid #e6d3a3; font-size: 0.93rem; }
+    .files { margin: 0; padding: 14px 16px; border-radius: 10px; background: var(--ink); color: var(--sheet); font-family: var(--mono); font-size: 0.86rem; line-height: 1.7; overflow-x: auto; }
+
+    @media (max-width: 620px) {
+      .bar { position: static; }
+      .asset-body { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) { .meter span { transition: none; } }
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <div class="progress" aria-live="polite">
+      <div class="meter" aria-hidden="true"><span id="meterFill"></span></div>
+      <span id="progressText">Checking folder</span>
+      <button class="linkbtn" id="recheck" type="button">Check folder again</button>
+    </div>
+  </div>
+
+  <main>
+    <h1>Nine pictures, no clip</h1>
+    <p class="lede">
+      The cans on this site are real 3D, drawn by code, so they need no pictures and no video.
+      The only thing to make is the fruit: one picture for each flavour, with five pieces of fruit
+      on a plain blue background. I cut the pieces out, print them on the cans and let them fly around the page.
+    </p>
+
+    <p class="note">
+      <b>The site already works without them.</b> Until your pictures arrive it shows simple drawn fruit.
+      Your pictures replace those with real, photo-quality fruit.
+    </p>
+
+    <div id="groups"></div>
+
+    <section class="step">
+      <h2><span class="num" id="filesNum"></span> What to send me</h2>
+      <p>Download the nine pictures from Higgsfield and send them to me as they are, in one zip. I cut every piece out of the blue, name them and put them in the site.</p>
+      <pre class="files">Picture 1  Narangi Fizz      Picture 6  Kala Khatta
+Picture 2  Mango Chilli      Picture 7  Litchi Ice
+Picture 3  Nimbu Masala      Picture 8  Ginger Jeera
+Picture 4  Guava Pink Salt   Picture 9  Midnight Cola
+Picture 5  Kokum Cooler</pre>
+    </section>
+  </main>
+
+  <script>
+  (() => {
+    "use strict";
+
+    const DIR = "assets/bits";
+
+    const LAYOUT = "A studio photograph of exactly five separate pieces, arranged like the five dots on a dice: one large piece in the middle and one smaller piece near each corner.";
+    const RULES = "There are wide empty gaps between all five pieces. No piece touches or overlaps another, and every piece is completely inside the picture with background all around it. Each piece is seen from the front and slightly above, turned to its most beautiful angle. Nothing else is in the picture: no hands, no plates, no boards, no knives, no splashes, no loose drops, no text, no logos.";
+    const BLUE = "The background is one perfectly flat, evenly lit, solid pure blue colour, like a film blue screen, exactly the same blue in every corner: no gradient, no texture, no floor, no horizon line, no reflections and no cast shadows.";
+    const LOOK = "Ultra-detailed photorealistic commercial food photography, razor sharp from edge to edge with every piece in full focus. Bright, clean lighting: a large soft light from the top left and a thin bright rim light along the right edge of every piece, so each one has a crisp, clean outline against the blue. Everything is fresh and glistening, with tiny beads of water on the skins and wet, juicy cut faces where you can see every fibre and seed. Rich, saturated, true colours.";
+
+    const sheet = (middle, tl, tr, bl, br) =>
+      `${LAYOUT} In the middle, large: ${middle}. Top left: ${tl}. Top right: ${tr}. Bottom left: ${bl}. Bottom right: ${br}. ${RULES} ${BLUE} ${LOOK} 1:1.`;
+
+    const PICTURE_MODEL = {
+      name: "Nano Banana Pro", by: "for all nine pictures",
+      why: "Marked Unlimited in your Higgsfield account, so with the Unlimited switch on it costs no credits. It follows a layout like \"one in the middle, one in each corner\" well.",
+      chips: ["Unlimited switch on", "Resolution 2K", "1:1 (square)", "Attach nothing"],
+    };
+
+    const GROUPS = [
+      {
+        title: "The fruit, one picture per flavour",
+        model: PICTURE_MODEL,
+        intro: "Nine square pictures. Every one has the same plan: five pieces on plain blue, one big in the middle and one in each corner. The big middle piece is the one printed large on the can.",
+        note: "<b>Check every picture:</b> the background must be plain blue everywhere, with no shadows on it. The five pieces must not touch each other or the edge of the picture. If two pieces touch, or one is cut off by the edge, make it again. It costs nothing on Unlimited.",
+        items: [
+          { n: 1, file: "narangi", color: "#ff5a1f", title: "Narangi Fizz: oranges",
+            text: sheet(
+              "half of a ripe Nagpur orange, cut face towards the camera, with deep orange flesh, glistening juice sacs and a thin bright rind",
+              "a whole glossy orange with a short green stem and one dark green leaf",
+              "one thick round slice of orange, standing upright so its wheel of segments shows",
+              "a long curled strip of orange peel, twisted like a ribbon",
+              "a single peeled orange segment, plump and translucent") },
+          { n: 2, file: "mango", color: "#ffb300", title: "Mango Chilli: mango and red chilli",
+            text: sheet(
+              "a ripe Alphonso mango cheek, scored into a grid of cubes and pushed inside out so the golden cubes stand up like a hedgehog",
+              "a whole golden-yellow Alphonso mango with a blush of orange and a short stem",
+              "one glossy fresh red chilli with a green stalk, gently curved",
+              "a thick, long, curved slice of mango flesh, deep saffron yellow",
+              "one more fresh red chilli, smaller, lying at an angle") },
+          { n: 3, file: "nimbu", color: "#9bd21c", title: "Nimbu Masala: lime and mint",
+            text: sheet(
+              "half of a fresh green lime, cut face towards the camera, with pale green juicy flesh and a bright white pith ring",
+              "a whole dark green lime with a glossy dimpled skin",
+              "one thin round slice of lime, standing upright, almost translucent in the light",
+              "a fresh sprig of mint with five crisp bright green leaves",
+              "a wedge of lime, juicy side up") },
+          { n: 4, file: "guava", color: "#ff4d8d", title: "Guava Pink Salt: pink guava",
+            text: sheet(
+              "half of a ripe pink guava, cut face towards the camera, with deep pink flesh, a ring of small pale seeds and a thin green-yellow skin",
+              "a whole ripe guava with green-yellow skin and one green leaf on its stem",
+              "one thick round slice of pink guava, standing upright",
+              "one rough chunk of pink Himalayan rock salt, solid and opaque, in pale pink and peach",
+              "a wedge of pink guava") },
+          { n: 5, file: "kokum", color: "#d7102f", title: "Kokum Cooler: kokum fruit",
+            text: sheet(
+              "a fresh kokum fruit cut in half, with a thick deep crimson rind and pale pink-white segments inside",
+              "a whole round fresh kokum fruit, dark red-purple and glossy, with a small green stem",
+              "three pieces of dried kokum rind, dark purple-black, curled and leathery, close together as one small pile",
+              "one rough golden-brown chunk of jaggery, solid and matt",
+              "a second whole kokum fruit, slightly smaller, turned a different way") },
+          { n: 6, file: "kala", color: "#5b21d6", title: "Kala Khatta: black jamun",
+            text: sheet(
+              "a tight cluster of four ripe jamun fruits (Indian black plums) on one stem with a green leaf, each fruit an oval, glossy purple-black",
+              "one single whole jamun, glossy and almost black",
+              "a jamun cut in half lengthwise, showing vivid purple-pink flesh and a pale seed",
+              "one thick round slice of yellow lemon, standing upright",
+              "a single long, dark green jamun leaf") },
+          { n: 7, file: "litchi", color: "#1f6bff", title: "Litchi Ice: litchi",
+            text: sheet(
+              "a litchi half peeled, with the rough pink-red shell pulled back to show the white, pearly flesh inside",
+              "a whole litchi with a rough, bumpy pink-red shell and a short stem",
+              "a fully peeled litchi, a smooth white pearl of flesh, solid and opaque",
+              "two litchis on one stem with two green leaves",
+              "a fresh sprig of mint with five bright green leaves") },
+          { n: 8, file: "jeera", color: "#b8721f", title: "Ginger Jeera: ginger and lemon",
+            text: sheet(
+              "a large, knobbly piece of fresh ginger root with pale golden-brown skin and one cut end showing fibrous yellow flesh",
+              "half of a yellow lemon, cut face towards the camera",
+              "three thin round slices of fresh ginger, overlapping each other as one small stack",
+              "a small neat heap of roasted cumin seeds, brown and ridged",
+              "one thin round slice of lemon, standing upright") },
+          { n: 9, file: "cola", color: "#1b1922", title: "Midnight Cola: spices and lime",
+            text: sheet(
+              "two cinnamon sticks tied together with a thin piece of string, warm brown with tightly rolled bark",
+              "half of a green lime, cut face towards the camera",
+              "one whole star anise, dark brown with eight points and shiny seeds",
+              "one dark, glossy vanilla pod, slightly curved",
+              "one small rough cube of dark brown raw cane sugar, solid and matt") },
+        ],
+      },
+    ];
+    const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+    const modelBox = (m) =>
+      `<div class="model"><p class="label">Model to pick in Higgsfield</p>` +
+      `<p class="name">${esc(m.name)}<small>${esc(m.by)}</small></p>` +
+      `<p class="why">${esc(m.why)}</p>` +
+      `<ul class="chips">${m.chips.map((c) => `<li>${esc(c)}</li>`).join("")}</ul></div>`;
+
+    const cards = [];
+    GROUPS.forEach((group, i) => {
+      const section = document.createElement("section");
+      section.className = "step";
+      section.innerHTML =
+        `<h2><span class="num">${i + 1}</span> ${esc(group.title)}</h2>` +
+        `<p>${esc(group.intro)}</p>` +
+        (group.model ? modelBox(group.model) : "") +
+        (group.note ? `<p class="note">${group.note}</p>` : "");
+      group.items.forEach((item) => {
+        const el = document.createElement("article");
+        el.className = "asset";
+        el.innerHTML =
+          `<div class="asset-head"><span class="n">${item.n}</span><span class="dot" style="background:${item.color}"></span><h3>${esc(item.title)} (1:1)</h3><span class="status">Not in the site yet</span></div>` +
+          `<p class="attach"><b>Attach nothing.</b></p>` +
+          `<div class="asset-body"><p class="prompt"></p><img class="preview" alt="" hidden></div>` +
+          `<div class="asset-foot"><button class="copy" type="button">Copy prompt</button><span>I cut it into <code>${esc(item.file)}-1.webp</code> to <code>${esc(item.file)}-5.webp</code></span></div>`;
+        el.querySelector(".prompt").textContent = item.text;
+        el.querySelector(".copy").addEventListener("click", (e) => copy(item.text, e.currentTarget));
+        section.append(el);
+        cards.push({ el, file: item.file });
+      });
+      document.getElementById("groups").append(section);
+    });
+    document.getElementById("filesNum").textContent = String(GROUPS.length + 1);
+
+    async function copy(text, button) {
+      let ok = false;
+      try { await navigator.clipboard.writeText(text); ok = true; }
+      catch (_) {
+        const ta = document.createElement("textarea");
+        ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+        document.body.append(ta); ta.select();
+        try { ok = document.execCommand("copy"); } catch (_) { ok = false; }
+        ta.remove();
+      }
+      button.textContent = ok ? "Copied" : "Select the text and copy it";
+      button.classList.toggle("is-done", ok);
+      window.setTimeout(() => { button.textContent = "Copy prompt"; button.classList.remove("is-done"); }, 1800);
+    }
+
+    // The site lists the cut-out fruit in assets/bits/manifest.json once I have placed it.
+    let run = 0;
+    async function checkFolder() {
+      const mine = ++run;
+      let list = {};
+      try {
+        const r = await fetch(`${DIR}/manifest.json?t=${Date.now()}`);
+        if (r.ok) list = await r.json();
+      } catch (_) { list = {}; }
+      if (mine !== run) return;
+      let done = 0;
+      cards.forEach((card) => {
+        const has = Boolean(list[card.file]);
+        if (has) done++;
+        card.el.classList.toggle("is-found", has);
+        card.el.querySelector(".status").textContent = has ? "In the site" : "Not in the site yet";
+        const preview = card.el.querySelector(".preview");
+        preview.hidden = !has;
+        if (has) preview.src = `${DIR}/${card.file}-1.webp?t=${Date.now()}`;
+      });
+      document.getElementById("meterFill").style.width = `${(done / cards.length) * 100}%`;
+      document.getElementById("progressText").textContent =
+        done === cards.length ? "All nine flavours have their fruit in the site" : `${done} of ${cards.length} in the site`;
+    }
+
+    document.getElementById("recheck").addEventListener("click", checkFolder);
+    window.addEventListener("focus", checkFolder);
+    checkFolder();
+  })();
+  </script>
+</body>
+</html>
